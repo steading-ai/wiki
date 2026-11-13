@@ -1,0 +1,12 @@
+# Tools for checking the wiki. hk.pkl runs all of them; CI installs this file and runs hk.
+[tools]
+go = "1.27.4"
+hk = "2.12.0"
+pkl = "0.33.0"
+lychee = "0.24.2"
+jactionlint = "2.5.0"
+# jactionlint runs it over each workflow's scripts.
+shellcheck = "0.11.0"
+
+[settings]
+lockfile = true

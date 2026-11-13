@@ -1,0 +1,6 @@
+# Links between the wiki's files, and the headings they point at, all resolve.
+# Offline, so a commit never waits on or fails because of another site; the
+# scheduled job in .github/workflows/links.yml checks the web with --offline=false.
+offline = true
+include_fragments = "anchor-only"
+no_progress = true

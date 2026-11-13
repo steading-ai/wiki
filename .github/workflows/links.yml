@@ -1,0 +1,36 @@
+name: Links
+
+# Links to other sites rot without any commit here, so they are checked on a
+# schedule instead of in the pre-commit hook, which stays offline.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: links
+  cancel-in-progress: true
+
+jobs:
+  lychee:
+    name: lychee, online
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install tools
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+        with:
+          install_args: lychee
+
+      - name: Check every link, on the web too
+        run: lychee --offline=false '**/*.md'

@@ -1,0 +1,48 @@
+amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
+
+import "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Builtins.pkl"
+
+local checks = new Mapping<String, Step | Group> {
+  // The wiki's own rules (AGENTS.md). They hold across files, so the check reads the whole wiki every time.
+  ["wikilint"] = new Step {
+    glob = List("**/*.md", "schemas/*.json", "**/*.go", "go.mod", "go.sum")
+    check = "go run ./cmd/wikilint"
+  }
+  // Every link between files, and every heading a link points at, resolves. lychee.toml keeps it offline.
+  ["lychee"] = (Builtins.lychee) {
+    types = null
+    glob = List("**/*.md")
+  }
+  ["go-fmt"] = Builtins.go_fmt
+  ["go-vet"] = Builtins.go_vet
+  ["go-test"] = new Step {
+    glob = List("**/*.go", "go.mod", "go.sum", "schemas/*.json")
+    check = "go test ./..."
+  }
+  ["check-merge-conflict"] = (Builtins.check_merge_conflict) { exclude = List("mise.lock") }
+  ["detect-private-key"] = Builtins.detect_private_key
+  ["mise"] = Builtins.mise
+  ["pkl"] = Builtins.pkl
+  ["pkl-format"] = Builtins.pkl_format
+  ["jactionlint"] = Builtins.jactionlint
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = checks
+  }
+  ["commit-msg"] {
+    steps {
+      ["check-conventional-commit"] = Builtins.check_conventional_commit
+    }
+  }
+  ["check"] {
+    steps = checks
+  }
+  ["fix"] {
+    fix = true
+    steps = checks
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Page frontmatter",
+  "description": "A page carries no frontmatter. Its title is its first heading, and its sources are the files its footnotes link to.",
+  "type": "object",
+  "additionalProperties": false
+}

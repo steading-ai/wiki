@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Source frontmatter",
+  "description": "A source is a dated record of something said or written. Its filename holds the minute it was captured, and its first heading is its title.",
+  "type": "object",
+  "required": ["participants"],
+  "additionalProperties": false,
+  "properties": {
+    "participants": {
+      "description": "The people whose words the source records, by GitHub login. An agent acting as a GitHub App appears as its bot login, such as mill[bot].",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "maxLength": 44,
+        "pattern": "^[A-Za-z0-9]+(-[A-Za-z0-9]+)*(\\[bot\\])?$"
+      }
+    }
+  }
+}

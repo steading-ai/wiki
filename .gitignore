@@ -1,0 +1,7 @@
+# Obsidian keeps per-person state beside its settings; only the link settings are shared.
+# The first line overrides any global ignore of the whole folder.
+!.obsidian/
+.obsidian/*
+!.obsidian/app.json
+.DS_Store
+.claude/worktrees/
