@@ -7,7 +7,7 @@
   "additionalProperties": false,
   "properties": {
     "participants": {
-      "description": "The people whose words the source records, by GitHub login. An agent acting as a GitHub App appears as its bot login, such as mill[bot].",
+      "description": "The people who took part in the conversation or wrote the record, by GitHub login. Someone only quoted in it is not a participant. An agent acting as a GitHub App appears as its bot login, such as mill[bot].",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,

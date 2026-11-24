@@ -1,7 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Page frontmatter",
-  "description": "A page carries no frontmatter. Its title is its first heading, and its sources are the files its footnotes link to.",
+  "description": "A page's type sets the section it is listed in and the fields it carries. Its title is its first heading, and its sources are the files its footnotes link to.",
   "type": "object",
-  "additionalProperties": false
+  "required": ["type", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "description": "The kind of page. A project is one component of Steading; a topic is anything else.",
+      "enum": ["project", "topic"]
+    },
+    "summary": {
+      "description": "One sentence for listings, restating what the page's body says and cites.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "status": {
+      "description": "Where a project stands. concept: designed, not built. active: built, and in use. dormant: built, with no active work. The page's Status section states it with a citation.",
+      "enum": ["concept", "active", "dormant"]
+    },
+    "repository": {
+      "description": "The GitHub repository that holds a project, as owner/name.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["type"],
+        "properties": { "type": { "const": "project" } }
+      },
+      "then": { "required": ["status"] },
+      "else": { "properties": { "status": false, "repository": false } }
+    }
+  ]
 }

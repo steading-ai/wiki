@@ -163,6 +163,49 @@ func (d *document) definitions() []*extast.Footnote {
 	return out
 }
 
+// status requires a project page to state its status in a "## Status"
+// section that cites a source, since the status in its frontmatter can't
+// carry a footnote of its own.
+func (d *document) status(report func(pos int, msg string)) {
+	for n := d.root.FirstChild(); n != nil; n = n.NextSibling() {
+		h, ok := n.(*ast.Heading)
+		if !ok || h.Level != 2 || d.text(h) != "Status" {
+			continue
+		}
+		for s := n.NextSibling(); s != nil; s = s.NextSibling() {
+			if next, ok := s.(*ast.Heading); ok && next.Level <= 2 {
+				break
+			}
+			cited := false
+			_ = ast.Walk(s, func(c ast.Node, entering bool) (ast.WalkStatus, error) {
+				if _, ok := c.(*extast.FootnoteLink); ok && entering {
+					cited = true
+					return ast.WalkStop, nil
+				}
+				return ast.WalkContinue, nil
+			})
+			if cited {
+				return
+			}
+		}
+		report(d.start(n), "a project's ## Status section cites a source for its status")
+		return
+	}
+	report(0, "a project page states its status in a ## Status section that cites a source")
+}
+
+// text is the plain text inside a node.
+func (d *document) text(n ast.Node) string {
+	var out []byte
+	_ = ast.Walk(n, func(c ast.Node, entering bool) (ast.WalkStatus, error) {
+		if t, ok := c.(*ast.Text); ok && entering {
+			out = append(out, t.Segment.Value(d.src)...)
+		}
+		return ast.WalkContinue, nil
+	})
+	return string(out)
+}
+
 // narrating catches wording that tells how something changed instead of
 // stating what is true. Each phrase is one a fact can almost always be
 // written without; a page that needs to say what changed cites the source

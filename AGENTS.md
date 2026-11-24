@@ -23,7 +23,7 @@ Both content folders are flat: no folders inside them, and nothing in them but M
 A source records what was said or written at one moment: a conversation, a meeting, a thread, an issue, an article.
 
 - **Name:** the UTC minute it was captured, then a slug: `sources/202611131420-wiki-foundations.md`. Lowercase words joined by hyphens.
-- **Frontmatter:** `participants`, the GitHub logins of the people whose words it records. An agent acting as a GitHub App is its bot login, quoted in a flow list: `participants: [ivy, "mill[bot]"]`. An agent in an interactive session has no login and is not a participant. [`schemas/sources.schema.json`](schemas/sources.schema.json) is the whole schema.
+- **Frontmatter:** `participants`, the GitHub logins of the people who took part in the conversation or wrote the record. Quoting someone, such as a pasted chat, doesn't make them a participant. An agent acting as a GitHub App is its bot login, quoted in a flow list: `participants: [ivy, "mill[bot]"]`. An agent in an interactive session has no login and is not a participant. [`schemas/sources.schema.json`](schemas/sources.schema.json) is the whole schema.
 - **Body:** a title as the first and only level-one heading, then a distilled record: what was decided, what was passed over and why, and what stayed open. Quote exact wording where the wording matters.
 - **Never a raw transcript.** Transcripts are noise and carry details of the machine they ran on.
 - **A source speaks as of its moment.** A change it records reads "It became X", not "It was X, now it is Y".
@@ -34,7 +34,9 @@ A source records what was said or written at one moment: a conversation, a meeti
 A page states what is true now about one subject.
 
 - **Name:** lowercase words joined by hyphens: `pages/decision-records.md`. The name is the page's identity, so pick one that will stay true.
-- **No frontmatter.** The title is the first and only level-one heading.
+- **Frontmatter:** a `type`, which sets the section the page is listed in, and a one-sentence `summary` for listings. A `project` page, one per Steading component, adds its `status` and, if it has one, its `repository`. Every other page is a `topic`. [`schemas/pages.schema.json`](schemas/pages.schema.json) is the whole schema.
+- **Title:** the first and only level-one heading.
+- **A project states its status in a `## Status` section** that cites a source, since frontmatter can't hold a footnote.
 - **Every page cites its sources** with footnotes that link into `sources/`:
 
   ```markdown
@@ -46,13 +48,15 @@ A page states what is true now about one subject.
   Every footnote links to at least one source, and every footnote is cited in the text.
 - **Facts, not history.** A page never narrates how something changed: no "previously", "no longer", "switched to", "is now". When a fact changes, rewrite the page to state the new fact and cite the source that recorded the change. The checker rejects the common phrasings; rewording past a false match makes the sentence plainer anyway.
 - **One page owns each fact.** Other pages link to it instead of restating it.
+- **No open questions.** A page states what is known, including what is undecided. It doesn't list questions; every reader draws their own.
 
 ## Writing
 
 - GitHub-flavored Markdown. No line length, no table alignment, no formatter.
 - Links are Markdown links with relative paths, `[text](other-page.md)` and `[text](../sources/…)`. `[[wikilinks]]` are rejected. The Obsidian settings in [`.obsidian/app.json`](.obsidian/app.json) make Obsidian write the same kind.
+- Pages speak to the reader, a user or contributor, as *you*, and for the project, never for one person. No one's opinions, habits, or anecdotes.
 - People are named by GitHub login.
-- The wiki has no page types. A `type:` key and a schema for it arrive when a kind of page needs fields of its own, not before.
+- A new page type, and its fields, arrives when a kind of page needs fields of its own, not before.
 
 ## Recording a conversation
 
@@ -67,7 +71,7 @@ A page states what is true now about one subject.
 
 | Check | What it holds |
 |-------|---------------|
-| `go run ./cmd/wikilint` | names, layout, frontmatter against `schemas/`, titles, wikilinks, footnotes, citations, and narration on pages |
+| `go run ./cmd/wikilint` | names, layout, frontmatter against `schemas/`, titles, wikilinks, footnotes, citations, project status sections, and narration on pages |
 | `lychee` | every link between files, and every heading a link points at, resolves ([`lychee.toml`](lychee.toml), offline) |
 | `go test ./...` | the checker does what this file says |
 

@@ -23,6 +23,23 @@ The wiki is flat.[^1]
 [^1]: [Wiki foundations](../sources/202611131420-wiki-foundations.md)
 `
 
+// topic is the frontmatter of a page that is not a project.
+const topic = "---\ntype: topic\nsummary: What the wiki is.\n---\n"
+
+// project is the frontmatter of a project page.
+const project = "---\ntype: project\nstatus: concept\nrepository: steading-ai/skift\nsummary: Tracks the work.\n---\n"
+
+const goodProject = project + `# skift
+
+skift tracks the work.[^1]
+
+## Status
+
+skift is a concept.[^1]
+
+[^1]: [Wiki foundations](../sources/202611131420-wiki-foundations.md)
+`
+
 // wiki builds a wiki in a temporary folder from a map of paths to contents,
 // using the repository's own schemas, and returns where it is.
 func wiki(t *testing.T, files map[string]string) string {
@@ -69,9 +86,10 @@ func TestAWellFormedWikiPasses(t *testing.T) {
 	got := check(t, map[string]string{
 		"README.md": "# Wiki\n",
 		"sources/202611131420-wiki-foundations.md":     goodSource,
-		"pages/the-wiki.md":                            goodPage,
-		"pages/second-page.md":                         "# Second\n\nSee [the wiki](the-wiki.md).[^a]\n\n[^a]: Recorded in [foundations](../sources/202611131420-wiki-foundations.md#wiki-foundations).\n",
-		"pages/code-is-not-prose.md":                   "# Code\n\nFacts.[^1] `[[not a link]]` and `previously`.\n\n```text\n[[still not a link]] used to be\n[^2]: not a definition\n```\n\n[^1]: [Wiki foundations](../sources/202611131420-wiki-foundations.md)\n",
+		"pages/the-wiki.md":                            topic + goodPage,
+		"pages/skift.md":                               goodProject,
+		"pages/second-page.md":                         topic + "# Second\n\nSee [the wiki](the-wiki.md).[^a]\n\n[^a]: Recorded in [foundations](../sources/202611131420-wiki-foundations.md#wiki-foundations).\n",
+		"pages/code-is-not-prose.md":                   topic + "# Code\n\nFacts.[^1] `[[not a link]]` and `previously`.\n\n```text\n[[still not a link]] used to be\n[^2]: not a definition\n```\n\n[^1]: [Wiki foundations](../sources/202611131420-wiki-foundations.md)\n",
 		"sources/202611131421-history-is-fine-here.md": "---\nparticipants: [ivy, \"mill[bot]\"]\n---\n\n# History\n\nThe wiki was previously nested. It became flat.\n",
 	})
 	if len(got) != 0 {
@@ -121,9 +139,39 @@ func TestProblems(t *testing.T) {
 			want:  "notes/idea.md: Markdown lives in pages/, sources/, or the top",
 		},
 		{
-			name:  "frontmatter on a page",
-			files: map[string]string{"pages/the-wiki.md": "---\ntype: decision\n---\n" + goodPage},
-			want:  "pages/the-wiki.md:1: frontmatter: /: additional properties 'type' not allowed",
+			name:  "page without a type",
+			files: map[string]string{"pages/the-wiki.md": goodPage},
+			want:  "pages/the-wiki.md:1: frontmatter: /: missing properties 'type', 'summary'",
+		},
+		{
+			name:  "page with an unknown type",
+			files: map[string]string{"pages/the-wiki.md": "---\ntype: decision\nsummary: What the wiki is.\n---\n" + goodPage},
+			want:  "pages/the-wiki.md:1: frontmatter: /type:",
+		},
+		{
+			name:  "project without a status",
+			files: map[string]string{"pages/skift.md": strings.Replace(goodProject, "status: concept\n", "", 1)},
+			want:  "pages/skift.md:1: frontmatter: /: missing property 'status'",
+		},
+		{
+			name:  "project with an unknown status",
+			files: map[string]string{"pages/skift.md": strings.Replace(goodProject, "status: concept", "status: shipped", 1)},
+			want:  "pages/skift.md:1: frontmatter: /status:",
+		},
+		{
+			name:  "topic with a status",
+			files: map[string]string{"pages/the-wiki.md": "---\ntype: topic\nstatus: active\nsummary: What the wiki is.\n---\n" + goodPage},
+			want:  "pages/the-wiki.md:1: frontmatter: /status:",
+		},
+		{
+			name:  "project without a Status section",
+			files: map[string]string{"pages/skift.md": project + goodPage},
+			want:  "pages/skift.md:7: a project page states its status in a ## Status section",
+		},
+		{
+			name:  "project whose Status section cites nothing",
+			files: map[string]string{"pages/skift.md": strings.Replace(goodProject, "skift is a concept.[^1]", "skift is a concept.", 1)},
+			want:  "pages/skift.md:11: a project's ## Status section cites a source",
 		},
 		{
 			name:  "source without participants",

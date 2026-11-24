@@ -169,6 +169,9 @@ func (c *checker) file(kind, rel string) error {
 	doc.footnotes(func(pos int, msg string) { c.report(rel, line(pos), "%s", msg) })
 	if kind == Pages {
 		doc.citations(func(pos int, msg string) { c.report(rel, line(pos), "%s", msg) }, c.sourceExists)
+		if front["type"] == "project" {
+			doc.status(func(pos int, msg string) { c.report(rel, line(pos), "%s", msg) })
+		}
 		doc.narration(func(pos int, phrase string) {
 			c.report(rel, line(pos), "%q narrates a change; a page states what is true now, and the source records how it changed", phrase)
 		})
