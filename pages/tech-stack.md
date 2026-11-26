@@ -18,7 +18,7 @@ Connect-RPC is language-agnostic and type-checked, works in the browser and on m
 
 ## PostgreSQL
 
-Steading uses PostgreSQL, through pgx, sqlc, goose, and River. PostgreSQL is a commitment, not an implementation detail: Steading doesn't aim to be database-agnostic, and no component keeps a second storage backend possible. [You just need Postgres](https://youjustneedpostgres.com). What a component keeps fixed is its Connect-RPC contract and its tenancy, not its database.[^stack][^postgres]
+Steading uses PostgreSQL, through pgx, sqlc, goose, and River. PostgreSQL is a commitment, not an implementation detail: Steading doesn't aim to be database-agnostic, and no component keeps a second storage backend possible. [You just need Postgres](https://youjustneedpostgres.com). What a component keeps fixed is its Connect-RPC contract and its [tenancy](hosting.md#one-organization-per-instance), not its database.[^stack][^postgres]
 
 PostgreSQL offers great types, message queueing, full-text search, vector search, unstructured documents, time series, caching, and more. The most value comes from using all of it, not from supporting every database.[^stack] Use its features fully, such as views, SQL functions, recursive CTEs, row locking, advisory locks, LISTEN/NOTIFY, and custom plans, and aim for queries that are performant, expressive, easy to understand, and clean.[^postgres]
 

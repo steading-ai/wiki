@@ -14,6 +14,23 @@ Project management systems like Trello, Pivotal Tracker, GitHub Projects, Linear
 
 skift is built and in use.[^steading]
 
+## steading-ai's tracker
+
+The next goal is for skift to run as a public service that is steading-ai's own issue tracker, in place of GitHub issues. Its scope is narrow on purpose:[^hosting]
+
+- **Maintainers and their agents only.** Anyone else keeps using GitHub issues for now.
+- **No web UI.**
+- **No MCP over HTTP.** Agents use the CLI and the stdio MCP server, and both reach a remote skift with `--address`.
+
+Pointing a repository at a hosted skift needs:[^hosting]
+
+- a file in the repository that names its host;
+- a sign-in flow in the CLI and the MCP server, which says clearly when sign-in to a service fails;
+- credential storage in skift, in the manner of Git's and Docker's credential helpers;
+- configuration with a precise specification of how its layers merge and which one wins, `/etc` among them.
+
+The design of sign-in and configuration is undecided.[^hosting]
+
 ## A backlog that is a graph
 
 skift's backlog is a directed acyclic graph. A goal decomposes into prerequisites the way a package manager such as Gentoo's resolves what installing ffmpeg needs, except that software has ambiguity and plans change. Agents are effective at identifying prerequisites and bad at keeping them all in context; skift keeps them.[^skift]
@@ -47,3 +64,4 @@ skift records estimates and actual costs; only actuals are recorded so far, and 
 [^steading]: [Projects interview: steading](../sources/202611150814-projects-in-ivys-words.md#steading-aisteading)
 [^mill]: [Projects interview: mill](../sources/202611150814-projects-in-ivys-words.md#steading-aimill)
 [^principles]: [Projects interview: principles](../sources/202611150814-projects-in-ivys-words.md#principles)
+[^hosting]: [Hosting the stack](../sources/202611260037-hosting-the-stack.md)
