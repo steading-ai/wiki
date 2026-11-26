@@ -51,7 +51,7 @@ A rule that several queries share is written once, in the schema, as a view or S
 goose runs migrations.[^stack] Their safety comes from tools, not a style guide:[^migrations]
 
 - **Lint:** squawk checks each new migration for statements that take unsafe locks, as an [hk](#hk) step.
-- **Code:** goose's session lock keeps two migrations from running at once, the migration connection sets `lock_timeout` and retries a bounded number of times, and a binary refuses a schema newer than itself.
+- **Code:** goose's session lock keeps two migrations from running at once, the migration connection sets `lock_timeout` and retries a bounded number of times, and a binary refuses a schema whose [compatibility floor](releases.md#downgrading) it doesn't meet.[^packages]
 - **Tests:** an upgrade from every released schema, with data in every table, and a check that shipped migrations never change.
 - **Review** covers only what tools can't judge: what a default means for existing rows, how big a backfill is, and data that only running code wrote.
 
@@ -97,4 +97,5 @@ Markdown is linted too: one paragraph per line, never hard-wrapped.[^postgres]
 [^postgres]: [PostgreSQL and hk across the stack](../sources/202611250838-postgres-and-hk.md)
 [^migrations]: [Releases, migrations, and background work](../sources/202611251316-releases-and-migrations.md)
 [^parallel]: [Tests that run in parallel](../sources/202611251958-parallel-test-runs.md)
+[^packages]: [Packages, channels, and unattended upgrades](../sources/202611260229-packages-and-unattended-upgrades.md)
 [^thicket]: [Projects interview: thicket](../sources/202611150814-projects-in-ivys-words.md#steading-aithicket)

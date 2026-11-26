@@ -10,6 +10,7 @@ summary: Where Steading's sites and services live on the web, and how a hosted S
 - **Docs:** `docs.stead.ing/<product>/`, one site built from every component's docs.[^hosting]
   - Each component's docs come from its latest release tag, and a component's [release](releases.md) rebuilds the site, so the docs never describe unreleased work. A docs-only fix ships with a release.[^hosting]
   - The site's root carries `llms.txt` and `llms-full.txt` for the whole suite, so you can hand an agent all of Steading's docs at once.[^hosting]
+- **Packages:** `pkgs.stead.ing`, one signed package repository for the whole suite. See [packages](packages.md).[^packages]
 - **Accounts:** sign-up and sign-in, when they exist, are first-party, on `stead.ing`.[^hosting]
 - **Tenant endpoints:** each organization's stack is reached at `<org>.steading.run`, which routes each Connect-RPC procedure by its package path to that component's instance.[^hosting]
 - **This wiki:** `wiki.stead.ing`. See [the wiki](wiki.md).[^foundations]
@@ -35,3 +36,4 @@ That puts two things outside the components:[^hosting]
 
 [^hosting]: [Hosting the stack](../sources/202611260037-hosting-the-stack.md)
 [^foundations]: [Wiki foundations](../sources/202611130854-wiki-foundations.md)
+[^packages]: [Packages, channels, and unattended upgrades](../sources/202611260229-packages-and-unattended-upgrades.md)
