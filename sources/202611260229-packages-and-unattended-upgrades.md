@@ -8,13 +8,13 @@ A working session in skift where ivy settled how Steading ships packages: a sign
 
 ## Why
 
-ivy wants every release, pre-releases included, on their own server as soon as it is cut, "so I could shorten the feedback loop", and wants onboarding and upgrades "as convenient as possible for end users". The project is in "this awkward teenage phase" where "it's just inaccessible to newcomers".
+ivy wants every release, pre-releases included, on her own server as soon as it is cut, "so I could shorten the feedback loop", and wants onboarding and upgrades "as convenient as possible for end users". The project is in "this awkward teenage phase" where "it's just inaccessible to newcomers".
 
 On upgrades: "Given the security landscape with agents, it's important that upgrades are done unattended, automatically, and are completely uneventful. I want to ship updates several times a week, if not daily. The faster, the better, and without toil on users." Upgrades are autonomous by default, with an escape hatch for an operator who later wants more care around rollouts.
 
 ## Scope
 
-- **Fedora only.** Most newcomers likely run Debian, Ubuntu, Arch, or macOS, but ivy agrees with Fedora's approach to Linux and wants the repository for themselves and "an easy path for anyone else who shares my love for this distro". CentOS and RHEL are YAGNI for now. skift's binary is static, so an EL host could likely use the same repository later with little work.
+- **Fedora only.** Most newcomers likely run Debian, Ubuntu, Arch, or macOS, but ivy agrees with Fedora's approach to Linux and wants the repository for herself and "an easy path for anyone else who shares my love for this distro". CentOS and RHEL are YAGNI for now. skift's binary is static, so an EL host could likely use the same repository later with little work.
 - **Not in scope:** an install script (`curl https://get.stead.ing | sh`) and self-updating binaries served from release channels. ivy holds them as an idea, "not really my style", and kept the work focused on Fedora packaging.
 
 ## One package repository for the suite
