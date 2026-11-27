@@ -5,7 +5,7 @@ summary: Brokers inference and limits what agents can do.
 ---
 # The gateway
 
-The gateway stands between agents and what they reach. It brokers credentials for inference, balances and routes inference across providers such as OpenRouter and multiple subscriptions, and limits what an agent can do based on its role.[^mill]
+The gateway stands between agents and what they reach. It brokers credentials for inference, balances and routes inference across OpenRouter and subscriptions from different providers, such as OpenAI's alongside Kimi's, and limits what an agent can do based on its role.[^mill]
 
 The gateway is its own project, separate from [croft](croft.md), and the two work together.[^croft] It may live in croft for a while; isolation comes later, and anything is better than nothing at all.[^croft]
 
